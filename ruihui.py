@@ -9,10 +9,9 @@ import torchvision.transforms as transforms
 from torch.utils.data import DataLoader, Dataset
 import numpy as np
 import matplotlib.pyplot as plt
-
 import sys
 
-# AI 폴더 경로를 추가
+# 폴더 경로를 추가
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 data_dir = 'image_data'
@@ -76,7 +75,7 @@ test_loader2 = DataLoader(test_data,
 
 # VGG-19-BN 모델을 학습이 끝난 파라미터와 함께 불러오기
 from torchvision import models
-net = models.vgg19_bn(pretrained = True)
+net = models.efficientnet_b7(pretrained = True)
 
 # 모든 파라미터의 경사 계산을 OFF로 설정
 for param in net.parameters():
@@ -85,13 +84,23 @@ for param in net.parameters():
 # 난수 고정
 torch_seed()
 
+# EfficientNet
 # 최종 노드의 출력을 2로 변경
 # 이 노드에 대해서만 경사 계산을 수행하게 됨
-in_features = net.classifier[6].in_features
-net.classifier[6] = nn.Linear(in_features, 2)
+# 최종 Fully Connected Layer를 새롭게 정의
+num_classes = len(classes)
+in_features = net.classifier[1].in_features  # 기존 클래스 개수의 입력 차원 가져오기
+net.classifier[1] = nn.Linear(in_features, num_classes)
+
+"""
+# Resnet
+in_features = net.fc.in_features
+num_classes = len(classes)
+net.fc = nn.Linear(in_features, num_classes)
+"""
 
 # AdaptiveAvgPool2d 함수 제거
-net.avgpool = nn.Identity()
+#net.avgpool = nn.Identity()
 
 # GPU 사용
 net = net.to(device)
@@ -104,13 +113,13 @@ criterion = nn.CrossEntropyLoss()
 
 # 최적화 함수 정의
 # 파라미터 수정 대상을 최종 노드로 제한
-optimizer = optim.SGD(net.classifier[6].parameters(),lr=lr,momentum=0.9)
+optimizer = optim.Adam(net.parameters(),lr=lr)
 
 # history 파일도 동시에 초기화
 history = np.zeros((0, 5))
 
 # 학습
-num_epochs = 100
+num_epochs = 30
 history = fit(net, optimizer, criterion, num_epochs, 
           train_loader, test_loader, device, history)
 
