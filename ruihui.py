@@ -1,14 +1,12 @@
 from torchlib import *
 
 import os
-import torch
 import torch.nn as nn
 import torch.optim as optim
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import DataLoader
 import numpy as np
-import matplotlib.pyplot as plt
 import sys
 
 # 폴더 경로를 추가
@@ -122,6 +120,8 @@ history = np.zeros((0, 5))
 num_epochs = 30
 history = fit(net, optimizer, criterion, num_epochs, 
           train_loader, test_loader, device, history)
+
+save_weights(net=net)
 
 # 결과 확인
 evaluate_history(history)
