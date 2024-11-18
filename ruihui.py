@@ -1,5 +1,5 @@
 from torchlib import *
-
+from distribute_images import *
 import os
 import torch.nn as nn
 import torch.optim as optim
@@ -12,7 +12,14 @@ import sys
 # 폴더 경로를 추가
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
+# 분류하려는 클래스의 리스트 작성
+classes = ['aibao','fubao','huibao','lebao','ruibao']
+
+
+src_dir = 'all_image'
 data_dir = 'image_data'
+
+distribute_images(source_dir=src_dir, output_dir=data_dir, classes=classes, train_ratio=0.8, rename=True)
 
 # Transforms 정의
 
@@ -35,9 +42,6 @@ train_transform = transforms.Compose([
 
 train_dir = os.path.join(data_dir, 'train')
 test_dir = os.path.join(data_dir, 'val')
-
-# 분류하려는 클래스의 리스트 작성
-classes = ['hui', 'rui']
 
 # 데이터셋 정의
 
@@ -89,16 +93,6 @@ torch_seed()
 num_classes = len(classes)
 in_features = net.classifier[1].in_features  # 기존 클래스 개수의 입력 차원 가져오기
 net.classifier[1] = nn.Linear(in_features, num_classes)
-
-"""
-# Resnet
-in_features = net.fc.in_features
-num_classes = len(classes)
-net.fc = nn.Linear(in_features, num_classes)
-"""
-
-# AdaptiveAvgPool2d 함수 제거
-#net.avgpool = nn.Identity()
 
 # GPU 사용
 net = net.to(device)
