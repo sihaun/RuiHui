@@ -156,50 +156,63 @@ def evaluate_history(history):
     plt.show()
 
 # 이미지와 라벨 표시
-def show_images_labels(loader, classes, net, device):
+def show_images_labels(loader, classes, net=None, device='cpu'):
+    """
+    Show images and their labels from the DataLoader.
 
+    Args:
+        loader: PyTorch DataLoader object.
+        classes: List of class names.
+        net: (Optional) Model for prediction. Default is None.
+        device: Device to perform computations on.
+    """
     # 데이터로더에서 처음 1세트를 가져오기
     for images, labels in loader:
         break
-    # 표시 수는 50개
+
+    # 표시할 이미지 개수
     n_size = min(len(images), 50)
 
     if net is not None:
-      # 디바이스 할당
-      inputs = images.to(device)
-      labels = labels.to(device)
+        # 디바이스 할당
+        inputs = images.to(device)
+        labels = labels.to(device)
 
-      # 예측 계산
-      outputs = net(inputs)
-      predicted = torch.max(outputs,1)[1]
-      #images = images.to('cpu')
+        # 예측 계산
+        outputs = net(inputs)
+        predicted = torch.max(outputs, 1)[1]
 
-    # 처음 n_size개 표시
+    # 플롯 크기 설정
     plt.figure(figsize=(20, 15))
+    
+    # 처음 n_size개의 이미지 표시
     for i in range(n_size):
-        ax = plt.subplot(5, 10, i + 1)
+        ax = plt.subplot(5, 10, i + 1)  # 5행 10열 서브플롯
         label_name = classes[labels[i]]
-        # net이 None이 아닌 경우는 예측 결과도 타이틀에 표시함
+        
+        # net이 None이 아닌 경우 예측 결과도 표시
         if net is not None:
-          predicted_name = classes[predicted[i]]
-          # 정답인지 아닌지 색으로 구분함
-          if label_name == predicted_name:
-            c = 'k'
-          else:
-            c = 'b'
-          ax.set_title(label_name + ':' + predicted_name, c=c, fontsize=20)
-        # net이 None인 경우는 정답 라벨만 표시
+            predicted_name = classes[predicted[i]]
+            # 정답 여부에 따라 색상 설정
+            color = 'k' if label_name == predicted_name else 'b'
+            ax.set_title(f'{label_name}\n{predicted_name}', c=color, fontsize=14)
         else:
-          ax.set_title(label_name, fontsize=20)
+            ax.set_title(label_name, fontsize=14)
+        
         # 텐서를 넘파이로 변환
         image_np = images[i].numpy().copy()
-        # 축의 순서 변경 (channel, row, column) -> (row, column, channel)
+        # (channel, row, column) -> (row, column, channel)로 변경
         img = np.transpose(image_np, (1, 2, 0))
-        # 값의 범위를[-1, 1] -> [0, 1]로 되돌림
-        img = (img + 1)/2
-        # 결과 표시
+        # 값의 범위를 [-1, 1] -> [0, 1]로 조정
+        img = (img + 1) / 2
+        
+        # 이미지 표시
         plt.imshow(img)
         ax.set_axis_off()
+
+    # 설명 추가
+    plt.subplots_adjust(top=0.9)  # 제목과 플롯 간격 조정
+    plt.suptitle("Black: Correct, Blue: Incorrect", fontsize=18, color='gray')
     plt.show()
 
 # 모델 가중치 저장
