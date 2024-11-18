@@ -1,4 +1,4 @@
-'''
+"""
 all_image 디렉터리에 있는 이미지를 image_data 디렉터리를 만든 후 train, val 로 분배
 1. 분배할 class를 받음. class = ['hui', 'rui']
 2. image_data 디렉터리 생성
@@ -6,7 +6,7 @@ all_image 디렉터리에 있는 이미지를 image_data 디렉터리를 만든 
 4. 각 디렉터리 안에 len(class) 만큼 디렉터리 생성 후 그 class의 이름대로 디렉터리 생성.
 5. train:val 만큼 분배한 이미지대로 class이름이 적힌 디렉터리에 분배.
 len(class) 만큼 디렉터리 생성 후 
-'''
+"""
 import os
 import shutil
 from sklearn.model_selection import train_test_split
