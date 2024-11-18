@@ -55,7 +55,7 @@ def distribute_images(source_dir, output_dir, classes, train_ratio=0.8):
         classes (list): List of class names to process.
         train_ratio (float): Ratio of images to include in the train set (default is 0.8).
     """
-    # Create the directory structure
+    # Create the directory structure.
     train_dir, val_dir = prepare_directories(output_dir, classes)
 
     # Process each class
