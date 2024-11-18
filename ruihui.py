@@ -71,7 +71,7 @@ test_loader2 = DataLoader(test_data,
 
 # 전이 학습의 경우
 
-# VGG-19-BN 모델을 학습이 끝난 파라미터와 함께 불러오기
+# efficientnet_b7 모델을 학습이 끝난 파라미터와 함께 불러오기
 from torchvision import models
 net = models.efficientnet_b7(pretrained = True)
 
