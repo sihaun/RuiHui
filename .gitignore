@@ -2,6 +2,7 @@
 __pycache__
 model_weights.pth
 add_images
+image_data
 
 *.DS_Store
 
