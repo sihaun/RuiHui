@@ -1,11 +1,5 @@
 
 
 weight.pth
-all_image
-image_data
 
 *.DS_Store
-
-
-*.jpg
-*.webp
