@@ -1,7 +1,7 @@
 
-__pycache__
-model_weights.pth
-add_images
+
+weight.pth
+all_image
 image_data
 
 *.DS_Store

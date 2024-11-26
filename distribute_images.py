@@ -103,3 +103,13 @@ def distribute_images(source_dir, output_dir, classes, train_ratio=0.8, rename=F
         print(f"{class_name} 클래스: Train {len(train_images)}개, Val {len(val_images)}개 복사 완료.")
     
     print("이미지 분배 완료.")
+
+if __name__ == "__main__":
+        # 분류하려는 클래스의 리스트 작성
+    classes = ['aibao','fubao','huibao','lebao','ruibao']
+
+
+    src_dir = 'all_image'
+    data_dir = 'image_data'
+
+    distribute_images(source_dir=src_dir, output_dir=data_dir, classes=classes, train_ratio=0.8, rename=True)
