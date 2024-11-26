@@ -3,22 +3,8 @@ __pycache__
 model_weights.pth
 add_images
 
+*.DS_Store
 
-.DS_Store
-all_image/.DS_Store
-all_image/aibao/.DS_Store
-all_image/fubao/.DS_Store
-all_image/huibao/.DS_Store
-all_image/lebao/.DS_Store
-all_image/ruibao/.DS_Store
-image_data/.DS_Store
-image_data/train/aibao/.DS_Store
-image_data/train/fubao/.DS_Store
-image_data/train/huibao/.DS_Store
-image_data/train/lebao/.DS_Store
-image_data/train/ruibao/.DS_Store
-image_data/val/aibao/.DS_Store
-image_data/val/fubao/.DS_Store
-image_data/val/huibao/.DS_Store
-image_data/val/lebao/.DS_Store
-image_data/val/ruibao/.DS_Store
+
+*.jpg
+*.webp
