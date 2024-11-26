@@ -23,121 +23,121 @@ def hyperparam():
 
 def main(args):
 
-      # GPU, 글씨체 설정(Mac OS)
-      if os.name == 'posix' and torch.backends.mps.is_available():
-            device = torch.device('mps')
-            print("GPU can be available")
-            plt.rcParams['font.family'] = 'AppleGothic'
-      # GPU, 글씨체 설정(Windows OS)
-      elif os.name == 'nt' and torch.cuda.is_available():
-            device = torch.device("cuda:0")
-            print("GPU can be available")
-            plt.rcParams['font.family'] = 'Malgun Gothic'
-      else:
-            raise Exception('No CUDA found')
-      # (-) 설정
-      plt.rcParams['axes.unicode_minus'] = 'False'
-      
-      if not args.cuda:
-            raise Exception('No GPU found, please run without --cuda')
+    # GPU, 글씨체 설정(Mac OS)
+    if os.name == 'posix' and torch.backends.mps.is_available():
+        device = torch.device('mps')
+        print("GPU can be available")
+        plt.rcParams['font.family'] = 'AppleGothic'
+    # GPU, 글씨체 설정(Windows OS)
+    elif os.name == 'nt' and torch.cuda.is_available():
+        device = torch.device("cuda:0")
+        print("GPU can be available")
+        plt.rcParams['font.family'] = 'Malgun Gothic'
+    else:
+        raise Exception('No CUDA found')
+    # (-) 설정
+    plt.rcParams['axes.unicode_minus'] = 'False'
+    
+    if not args.cuda:
+        raise Exception('No GPU found, please run without --cuda')
 
-      # 폴더 경로를 추가
-      sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-           
-      # 분류하려는 클래스의 리스트 작성
-      classes = args.classes
+    # 폴더 경로를 추가
+    sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+        
+    # 분류하려는 클래스의 리스트 작성
+    classes = args.classes
 
-      data_dir = args.datapath
+    data_dir = args.datapath
 
-      # Transforms 정의
+    # Transforms 정의
 
-      # 검증 데이터 : 정규화
-      test_transform = transforms.Compose([
-      transforms.Resize(256),
-      transforms.CenterCrop(224),
-      transforms.ToTensor(),
-      transforms.Normalize(0.5, 0.5)
-      ])
+    # 검증 데이터 : 정규화
+    test_transform = transforms.Compose([
+    transforms.Resize(256),
+    transforms.CenterCrop(224),
+    transforms.ToTensor(),
+    transforms.Normalize(0.5, 0.5)
+    ])
 
-      # 훈련 데이터 : 정규화에 반전과 RandomErasing 추가
-      train_transform = transforms.Compose([
-      transforms.RandomResizedCrop(224),
-      transforms.RandomHorizontalFlip(),
-      transforms.ToTensor(),
-      transforms.Normalize(0.5, 0.5),
-      transforms.RandomErasing(p=0.5, scale=(0.02, 0.33), ratio=(0.3, 3.3), value=0, inplace=False)
-      ])
+    # 훈련 데이터 : 정규화에 반전과 RandomErasing 추가
+    train_transform = transforms.Compose([
+    transforms.RandomResizedCrop(224),
+    transforms.RandomHorizontalFlip(),
+    transforms.ToTensor(),
+    transforms.Normalize(0.5, 0.5),
+    transforms.RandomErasing(p=0.5, scale=(0.02, 0.33), ratio=(0.3, 3.3), value=0, inplace=False)
+    ])
 
-      train_dir = os.path.join(data_dir, 'train')
-      test_dir = os.path.join(data_dir, 'val')
+    train_dir = os.path.join(data_dir, 'train')
+    test_dir = os.path.join(data_dir, 'val')
 
-      # 데이터셋 정의
+    # 데이터셋 정의
 
-      # 훈련용
-      train_data = datasets.ImageFolder(train_dir, 
-                  transform=train_transform)
-      # 훈련 데이터 이미지 출력용
-      train_data2 = datasets.ImageFolder(train_dir, 
-                  transform=test_transform)
-      # 검증용
-      test_data = datasets.ImageFolder(test_dir, 
-                  transform=test_transform)
+    # 훈련용
+    train_data = datasets.ImageFolder(train_dir, 
+                transform=train_transform)
+    # 훈련 데이터 이미지 출력용
+    train_data2 = datasets.ImageFolder(train_dir, 
+                transform=test_transform)
+    # 검증용
+    test_data = datasets.ImageFolder(test_dir, 
+                transform=test_transform)
 
-      # 데이터로더 정의
+    # 데이터로더 정의
 
-      batch_size = args.batch_size
+    batch_size = args.batch_size
 
-      # 훈련용
-      train_loader = DataLoader(train_data, 
-            batch_size=batch_size, shuffle=True)
+    # 훈련용
+    train_loader = DataLoader(train_data, 
+        batch_size=batch_size, shuffle=True)
 
-      # 검증용
-      test_loader = DataLoader(test_data, 
-            batch_size=batch_size, shuffle=False)
+    # 검증용
+    test_loader = DataLoader(test_data, 
+        batch_size=batch_size, shuffle=False)
 
-      # 이미지 출력용
-      train_loader2 = DataLoader(train_data2, 
-            batch_size=50, shuffle=True)
-      test_loader2 = DataLoader(test_data, 
-            batch_size=50, shuffle=True)
+    # 이미지 출력용
+    train_loader2 = DataLoader(train_data2, 
+        batch_size=50, shuffle=True)
+    test_loader2 = DataLoader(test_data, 
+        batch_size=50, shuffle=True)
 
-      # 전이 학습의 경우
-      net = modify_efficientnet_b7(len(classes))
+    # 전이 학습의 경우
+    net = modify_efficientnet_b7(len(classes))
 
-      # 난수 고정
-      torch_seed()
+    # 난수 고정
+    torch_seed()
 
-      # GPU 사용
-      net = net.to(device)
+    # GPU 사용
+    net = net.to(device)
 
-      # 학습률
-      lr = args.lr
+    # 학습률
+    lr = args.lr
 
-      # 손실 함수로 교차 엔트로피 사용
-      criterion = nn.CrossEntropyLoss()
+    # 손실 함수로 교차 엔트로피 사용
+    criterion = nn.CrossEntropyLoss()
 
-      # 최적화 함수 정의
-      # 파라미터 수정 대상을 최종 노드로 제한
-      optimizer = optim.Adam(net.parameters(),lr=lr)
+    # 최적화 함수 정의
+    # 파라미터 수정 대상을 최종 노드로 제한
+    optimizer = optim.Adam(net.parameters(),lr=lr)
 
-      # history 파일도 동시에 초기화
-      history = np.zeros((0, 5))
+    # history 파일도 동시에 초기화
+    history = np.zeros((0, 5))
 
-      # 학습
-      num_epochs = args.epochs
-      history = fit(net, optimizer, criterion, num_epochs, 
-            train_loader, test_loader, device, history)
+    # 학습
+    num_epochs = args.epochs
+    history = fit(net, optimizer, criterion, num_epochs, 
+        train_loader, test_loader, device, history)
 
-      save_weights(net=net, path=args.save)
+    save_weights(net=net, path=args.save)
 
-      # 결과 확인
-      evaluate_history(history)
+    # 결과 확인
+    evaluate_history(history)
 
-      # 난수 고정
-      torch_seed()
+    # 난수 고정
+    torch_seed()
 
-      # 검증 데이터 결과 출력
-      show_images_labels(test_loader2, classes, net, device)
+    # 검증 데이터 결과 출력
+    show_images_labels(test_loader2, classes, net, device)
 
 
 def fit(net, optimizer, criterion, num_epochs, train_loader, test_loader, device, history):
