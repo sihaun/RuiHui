@@ -1,6 +1,4 @@
 import torch
-import numpy as np
-import matplotlib.pyplot as plt
 
 # 모델 가중치 저장
 def save_weights(net, path='weight.pth'):

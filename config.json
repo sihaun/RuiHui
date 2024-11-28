@@ -1,11 +1,11 @@
 {
-    "arch": "modify_efficientnet_b7",
-    "datapath": "image_data",
-    "classes" : ["aibao","fubao","huibao","lebao","ruibao"],
-    "epochs": 30,
-    "batch_size": 5,
-    "lr": 0.001,
-    "cuda": true,
-    "save": "weight.pth"
-  }
+  "arch": "modify_efficientnet_b7",
+  "datapath": "image_data",
+  "classes" : ["aibao","fubao","huibao","lebao","ruibao"],
+  "epochs": 30,
+  "batch_size": 5,
+  "lr": 0.001,
+  "cuda": true,
+  "save": "weight.pth"
+}
   

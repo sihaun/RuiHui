@@ -142,9 +142,8 @@ def main(args):
 
 def fit(net, optimizer, criterion, num_epochs, train_loader, test_loader, device, history):
 
-    # tqdm 라이브러리 임포트
     from tqdm import tqdm
-
+    
     base_epochs = len(history)
   
     for epoch in range(base_epochs, num_epochs+base_epochs):
