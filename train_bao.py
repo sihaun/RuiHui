@@ -236,32 +236,32 @@ def eval_loss(loader, device, net, criterion):
     return loss
 
 def evaluate_history(history):
-    # 손실과 정확도 확인
-    print(f'초기상태 : 손실 : {history[0,3]:.5f}  정확도 : {history[0,4]:.4f}') 
-    print(f'최종상태 : 손실 : {history[-1,3]:.5f}  정확도 : {history[-1,4]:.4f}' )
+    # Check Loss and Accuracy
+    print(f'Initial state: Loss: {history[0,3]:.5f}  Accuracy: {history[0,4]:.4f}') 
+    print(f'Final state: Loss: {history[-1,3]:.5f}  Accuracy: {history[-1,4]:.4f}')
 
     num_epochs = len(history)
     unit = num_epochs / 10
 
-    # 학습 곡선 출력(손실)
+    # Plot the training curve (Loss)
     plt.figure(figsize=(9,8))
-    plt.plot(history[:,0], history[:,1], 'b', label='훈련')
-    plt.plot(history[:,0], history[:,3], 'k', label='검증')
-    plt.xticks(np.arange(0,num_epochs+1, unit))
-    plt.xlabel('반복 횟수')
-    plt.ylabel('손실')
-    plt.title('학습 곡선(손실)')
+    plt.plot(history[:,0], history[:,1], 'b', label='Training')
+    plt.plot(history[:,0], history[:,3], 'k', label='Validation')
+    plt.xticks(np.arange(0, num_epochs+1, unit))
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.title('Training Curve (Loss)')
     plt.legend()
     plt.show()
 
-    # 학습 곡선 출력(정확도)
+    # Plot the training curve (Accuracy)
     plt.figure(figsize=(9,8))
-    plt.plot(history[:,0], history[:,2], 'b', label='훈련')
-    plt.plot(history[:,0], history[:,4], 'k', label='검증')
-    plt.xticks(np.arange(0,num_epochs+1,unit))
-    plt.xlabel('반복 횟수')
-    plt.ylabel('정확도')
-    plt.title('학습 곡선(정확도)')
+    plt.plot(history[:,0], history[:,2], 'b', label='Training')
+    plt.plot(history[:,0], history[:,4], 'k', label='Validation')
+    plt.xticks(np.arange(0, num_epochs+1, unit))
+    plt.xlabel('Epochs')
+    plt.ylabel('Accuracy')
+    plt.title('Training Curve (Accuracy)')
     plt.legend()
     plt.show()
 
