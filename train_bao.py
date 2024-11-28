@@ -8,6 +8,7 @@ import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 import numpy as np
 import sys
 import config
@@ -125,9 +126,15 @@ def main(args):
 
     # 학습
     num_epochs = args.epochs
+    start_time = time.time()
+
     history = fit(net, optimizer, criterion, num_epochs, 
         train_loader, test_loader, device, history)
-
+    
+    elapsed_time = time.time() - start_time
+    print('====> total time: {}h {}m {:.2f}s'.format(
+        int(elapsed_time//3600), int((elapsed_time%3600)//60), elapsed_time%60))
+    
     save_weights(net=net, path=args.save)
 
     # 결과 확인
@@ -141,8 +148,6 @@ def main(args):
 
 
 def fit(net, optimizer, criterion, num_epochs, train_loader, test_loader, device, history):
-
-    from tqdm import tqdm
     
     base_epochs = len(history)
   
@@ -328,10 +333,6 @@ def show_images_labels(loader, classes, net=None, device='cpu'):
     plt.show()
 
 if __name__ == "__main__":
-    start_time = time.time()
     args = hyperparam()
     print(args)
     main(args)
-    elapsed_time = time.time() - start_time
-    print('====> total time: {}h {}m {:.2f}s'.format(
-        int(elapsed_time//3600), int((elapsed_time%3600)//60), elapsed_time%60))
