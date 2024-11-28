@@ -22,9 +22,9 @@ def config():
 
     # Add arguments with default values from JSON
     parser.add_argument('-a', '--arch', metavar='ARCH', default=default_config['arch'],
-                        choices=['efficientnet'],
+                        choices=['tf_efficientnet_b7'],
                         help='model architecture: ' +
-                             ' | '.join(['resnet', 'vgg', 'efficientnet']) +
+                             ' | '.join(['vgg', 'tf_efficientnet_b7']) +
                              f' (default: {default_config["arch"]})')
     parser.add_argument('--datapath', default=default_config['datapath'], type=str, metavar='PATH',
                         help=f'where you want to load/save your dataset? (default: {default_config["datapath"]})')

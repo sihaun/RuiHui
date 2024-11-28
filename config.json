@@ -1,5 +1,5 @@
 {
-  "arch": "modify_efficientnet_b7",
+  "arch": "tf_efficientnet_b7",
   "datapath": "image_data",
   "classes" : ["aibao","fubao","huibao","lebao","ruibao"],
   "epochs": 30,

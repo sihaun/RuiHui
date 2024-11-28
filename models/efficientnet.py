@@ -1,7 +1,10 @@
 import torch.nn as nn
 from torchvision.models import efficientnet_b7
 
-def modify_efficientnet_b7(num_classes):
+def tf_efficientnet_b7(num_classes):
+    """
+    transfer learning efficientnet_b7 model
+    """
     net = efficientnet_b7(pretrained=True)
     
     # Turn off gradient calculation for all layers

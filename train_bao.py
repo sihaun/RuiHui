@@ -13,8 +13,8 @@ import numpy as np
 import sys
 import config
 import time
-from utils import *
-from models import *
+import utils
+import models
 
 warnings.simplefilter('ignore')
 
@@ -41,14 +41,9 @@ def main(args):
     
     if not args.cuda:
         raise Exception('No GPU found, please run without --cuda')
-
-    # 폴더 경로를 추가
-    sys.path.append(os.path.dirname(os.path.dirname(__file__)))
         
-    # 분류하려는 클래스의 리스트 작성
+    # 분류하려는 클래스
     classes = args.classes
-
-    data_dir = args.datapath
 
     # Transforms 정의
 
@@ -69,6 +64,9 @@ def main(args):
     transforms.RandomErasing(p=0.5, scale=(0.02, 0.33), ratio=(0.3, 3.3), value=0, inplace=False)
     ])
 
+    # 폴더 경로를 추가
+    sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+    data_dir = args.datapath
     train_dir = os.path.join(data_dir, 'train')
     test_dir = os.path.join(data_dir, 'val')
 
@@ -77,9 +75,6 @@ def main(args):
     # 훈련용
     train_data = datasets.ImageFolder(train_dir, 
                 transform=train_transform)
-    # 훈련 데이터 이미지 출력용
-    train_data2 = datasets.ImageFolder(train_dir, 
-                transform=test_transform)
     # 검증용
     test_data = datasets.ImageFolder(test_dir, 
                 transform=test_transform)
@@ -97,16 +92,14 @@ def main(args):
         batch_size=batch_size, shuffle=False)
 
     # 이미지 출력용
-    train_loader2 = DataLoader(train_data2, 
-        batch_size=50, shuffle=True)
     test_loader2 = DataLoader(test_data, 
         batch_size=50, shuffle=True)
 
     # 전이 학습의 경우
-    net = modify_efficientnet_b7(len(classes))
+    net = models.__dict__[args.arch](num_classes = len(classes))
 
     # 난수 고정
-    torch_seed()
+    utils.torch_seed()
 
     # GPU 사용
     net = net.to(device)
@@ -135,13 +128,13 @@ def main(args):
     print('====> total time: {}h {}m {:.2f}s'.format(
         int(elapsed_time//3600), int((elapsed_time%3600)//60), elapsed_time%60))
     
-    save_weights(net=net, path=args.save)
+    utils.save_weights(net=net, path=args.save)
 
     # 결과 확인
     evaluate_history(history)
 
     # 난수 고정
-    torch_seed()
+    utils.torch_seed()
 
     # 검증 데이터 결과 출력
     show_images_labels(test_loader2, classes, net, device)
