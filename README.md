@@ -29,4 +29,4 @@ optimizer = optim.Adam(net.parameters(),lr=lr)
 
 num_epochs = 30
 
-If you want to fix configuration, fix config.json or train_bao.sh
+**If you want to fix configuration, fix config.json or train_bao.sh**
