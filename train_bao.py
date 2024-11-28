@@ -1,6 +1,5 @@
 import torch
 import warnings
-from distribute_images import *
 import os
 import torch.nn as nn
 import torch.optim as optim
