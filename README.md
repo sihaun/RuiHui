@@ -5,7 +5,7 @@ Pandas that can be distinguished : Aibao, Fubao, Huibao, Lebao, Ruibao.
 
 When the VGG-19-BN model was used, the accurancy was about 55%.
 
-Therefore, model **efficientnet_b7** was used to distinguish the small features of the image.
+But, model **efficientnet_b7** was used to distinguish the small features of the image.
 This currently shows an accuracy of about 85%.
 
 ![Figure_1](https://github.com/user-attachments/assets/db1228d3-3df6-44b9-8848-5513e4d59c37)
