@@ -1,7 +1,8 @@
 # RuiHui
-To distinguish Ruibao and Huibao.
+To distinguish the pandas including Ruibao and Huibao.
 
-Distinguishing them is so difficult.
+Pandas that can be distinguished : Aibao, Fubao, Huibao, Lebao, Ruibao.
+
 When the VGG-19-BN model was used, the accurancy was about 55%.
 
 Therefore, model efficientnet_b7 was used to distinguish the small features of the image.
@@ -22,6 +23,4 @@ optimizer = optim.Adam(net.parameters(),lr=lr)
 
 num_epochs = 30
 
-# torchlib.py
-You can use update version of torchlib.py in
-https://github.com/sihaun/dlftn.git
+If you want to fix configuration, fix config.json or train_bao.sh
