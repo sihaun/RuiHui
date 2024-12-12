@@ -29,4 +29,21 @@ optimizer = optim.Adam(net.parameters(),lr=lr)
 
 num_epochs = 30
 
+| Type | Value | Note |
+|------|-------|-------------|
+| Learning Type | transfer learning | transfer learning |
+| Model | tf_efficientnet_b7 | pretrained = True |
+| Batch Size | 5 |     |
+| Learning Rate | 0.001 |  |
+| Criterion | CrossEntropyLoss |  |
+| Optimizer | Adam |  |
+| Epochs | 30 |  |
+
+
+
+
+
+
+
+
 **If you want to fix configuration, fix config.json or train_bao.sh**
