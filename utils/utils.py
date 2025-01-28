@@ -1,8 +1,11 @@
 import torch
 
 # 모델 가중치 저장
-def save_weights(net, path='weight.pth'):
+def save_weight(net, path='weight.pt'):
    torch.save(net.state_dict(), path)
+
+def save_model(net, path='model.pt'):
+   torch.save(net, path)
 
 # 모델 가중치 불러오기
 def load_weights(net, path='weight.pth'):

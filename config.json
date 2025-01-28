@@ -5,7 +5,6 @@
   "epochs": 30,
   "batch_size": 5,
   "lr": 0.001,
-  "cuda": true,
   "save": "weight.pth"
 }
   
