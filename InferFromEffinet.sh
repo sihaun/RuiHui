@@ -1,0 +1,1 @@
+python InferFromEffinet.py --mode Image --weight weight.pt --source test_image.jpg
