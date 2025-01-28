@@ -21,7 +21,7 @@ def hyperparam():
     args = config.config()
     return args
 
-class Train_RuiHui():
+class TrainRuiHui():
     def __init__(self, data_dir, batch_size):
         # GPU, 글씨체 설정(Windows OS)
         if os.name == 'nt' and torch.cuda.is_available():
@@ -263,7 +263,7 @@ class Train_RuiHui():
 
 if __name__ == "__main__":
     args = hyperparam()
-    t1 = Train_RuiHui(args.datapath, args.batch_size)
+    t1 = TrainRuiHui(args.datapath, args.batch_size)
     t1.prepare_model(args.arch,'label_map.txt', args.load_weights)
     print(args)
     utils.torch_seed()
