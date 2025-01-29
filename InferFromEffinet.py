@@ -26,7 +26,7 @@ class InferFromEffinet():
         self.label_map = np.loadtxt(label_map_file, str, delimiter='\t')
         num_classes = len(self.label_map)
         self.model = effi.tf_efficientnet_b7(num_classes).to(self.DEVICE)
-        self.model.load_state_dict(torch.load(weight_path, map_location=self.DEVICE))
+        self.model.load_state_dict(torch.load(weight_path, map_location=self.DEVICE, weights_only=True))
         self.model.eval()
         
         
@@ -107,7 +107,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     is_train_from_scratch = False
     inferenceClass = InferFromEffinet()
-    inferenceClass.load_model(args.weight_path)
+    inferenceClass.load_model(args.weight)
     if args.mode == "Video":
         inferenceClass.inference_video(args.source)
     else:
