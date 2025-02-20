@@ -564,27 +564,18 @@ class MobileNetV3(nn.Module):
     def __init__(self, num_classes=1000):
       super(MobileNetV3, self).__init__()
       self.model = nn.Sequential(
-        InvertedResidualBlock(3, 16, 16, 3, 1, "ReLU"),
-        InvertedResidualBlock(16, 16, 16, 3, 1, "ReLU"),
-        InvertedResidualBlock(16, 64, 32, 3, 2, "ReLU"),
-        InvertedResidualBlock(32, 96, 32, 3, 1, "ReLU"),
-        InvertedResidualBlock(32, 96, 64, 3, 2, "ReLU"),
-        InvertedResidualBlock(64, 192, 64, 3, 1, "ReLU"),
-        InvertedResidualBlock(64, 192, 64, 3, 1, "ReLU"),
-        InvertedResidualBlock(64, 192, 64, 3, 1, "ReLU"),
-        InvertedResidualBlock(64, 384, 96, 3, 2, "Hardswish"),
-        InvertedResidualBlock(96, 384, 96, 3, 1, "Hardswish"),
-        InvertedResidualBlock(96, 384, 96, 3, 1, "Hardswish"),
-        InvertedResidualBlock(96, 384, 96, 3, 1, "Hardswish"),
-        InvertedResidualBlock(96, 384, 96, 3, 1, "Hardswish"),
-        InvertedResidualBlock(96, 384, 96, 3, 1, "Hardswish"),
-        InvertedResidualBlock(96, 576, 160, 3, 2, "Hardswish"),
-        InvertedResidualBlock(160, 960, 160, 3, 1, "Hardswish"),
-        InvertedResidualBlock(160, 960, 160, 3, 1, "Hardswish"),
-        InvertedResidualBlock(160, 960, 160, 3, 1, "Hardswish"),
-        InvertedResidualBlock(160, 960, 160, 3, 1, "Hardswish"),
-        InvertedResidualBlock(160, 960, 160, 3, 1, "Hardswish"),
-        InvertedResidualBlock(160, 960, 160, 3, 1, "Hardswish"),
+        InvertedResidualBlock(3, 16, 16, 3, 1, "ReLU", 1),
+        InvertedResidualBlock(16, 16, 16, 3, 1, "ReLU", 1),
+        InvertedResidualBlock(16, 64, 32, 3, 2, "ReLU", 1),
+        InvertedResidualBlock(32, 96, 32, 3, 1, "ReLU", 1),
+        InvertedResidualBlock(32, 96, 64, 3, 2, "ReLU", 1),
+        InvertedResidualBlock(64, 192, 64, 3, 1, "ReLU", 1),
+        InvertedResidualBlock(64, 192, 64, 3, 1, "ReLU", 1),
+        InvertedResidualBlock(64, 384, 96, 3, 2, "Hardswish", 1),
+        InvertedResidualBlock(96, 384, 96, 3, 1, "Hardswish", 1),
+        InvertedResidualBlock(96, 576, 160, 3, 2, "Hardswish", 1),
+        InvertedResidualBlock(160, 960, 160, 3, 1, "Hardswish", 1),
+        InvertedResidualBlock(160, 960, 160, 3, 1, "Hardswish", 1),
       )
       self.fc = nn.Linear(160, num_classes)
 
@@ -595,5 +586,5 @@ class MobileNetV3(nn.Module):
       x = self.fc(x)
       return x
 
-def create_mobilenetv3():
-  return MobileNetV3()
+def create_mobilenetv3(num_classes=1000):
+  return MobileNetV3(num_classes)

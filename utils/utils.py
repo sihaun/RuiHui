@@ -70,10 +70,27 @@ expand, stride, se, activation
         last_channel = adjust_channels(1280 // reduce_divider)  # C5
 '''
 class InvertedResidualBlock(nn.Module):
-    def __init__(self, in_channels, expand_channels, out_channels, kernel_size, stride, activation, se_reduction=1):
-        self.pointwise1 = PointwiseConv2d(in_channels, expand_channels, activation)
-        self.depthwise = DepthwiseConv2d(expand_channels, expand_channels, kernel_size, stride, activation)
-        self.pointwise2 = PointwiseConv2d(expand_channels, out_channels, activation)
+    def __init__(self, 
+                 in_channels, 
+                 expand_channels, 
+                 out_channels, 
+                 kernel_size, 
+                 stride, 
+                 activation : str, 
+                 se_reduction=1):
+        super(InvertedResidualBlock, self).__init__()
+        self.pointwise1 = PointwiseConv2d(in_channels, 
+                                          expand_channels, 
+                                          activation=activation)
+        self.depthwise = DepthwiseConv2d(expand_channels, 
+                                         expand_channels, 
+                                         kernel_size, 
+                                         stride=stride, 
+                                         activation=activation)
+        self.pointwise2 = PointwiseConv2d(expand_channels, 
+                                          out_channels, 
+                                          activation=activation)
+        self.se = None
         if se_reduction > 1:
             self.se = SEBlock(out_channels, se_reduction)
         elif se_reduction < 1:
@@ -83,31 +100,60 @@ class InvertedResidualBlock(nn.Module):
         x = self.pointwise1(x)
         x = self.depthwise(x)
         x = self.pointwise2(x)
-        if self.se:
+        if self.se is not None:
             x = self.se(x)
         return x
     
 class DepthwiseConv2d(nn.Module):
-    def __init__(self, in_channels, out_channels, kernel_size, **kwargs):
+    def __init__(self, 
+                 in_channels, 
+                 out_channels, 
+                 kernel_size, 
+                 stride,
+                 **kwargs):
         super(DepthwiseConv2d, self).__init__()
-        self.conv = Conv2dNormActivation(in_channels, out_channels, kernel_size=kernel_size, stride=1, groups=in_channels, **kwargs)
+        self.conv = Conv2dNormActivation(in_channels, 
+                                         out_channels, 
+                                         kernel_size=kernel_size, 
+                                         stride=stride, 
+                                         groups=in_channels, 
+                                         **kwargs)
 
     def forward(self, x):
         return self.conv(x)
     
 class PointwiseConv2d(nn.Module):
-    def __init__(self, in_channels, out_channels, **kwargs):
+    def __init__(self, 
+                 in_channels, 
+                 out_channels, 
+                 **kwargs):
         super(PointwiseConv2d, self).__init__()
-        self.conv = Conv2dNormActivation(in_channels, out_channels, kernel_size=1, **kwargs)
+        self.conv = Conv2dNormActivation(in_channels, 
+                                         out_channels, 
+                                         kernel_size=1, 
+                                         **kwargs)
 
     def forward(self, x):
         return self.conv(x)
 
 
 class Conv2dNormActivation(nn.Module):
-    def __init__(self, input_channels, output_channels, kernel_size, stride=1, groups=1, activation='ReLU', **kwargs):
+    def __init__(self, 
+                 input_channels, 
+                 output_channels, 
+                 kernel_size, 
+                 stride=1, 
+                 groups=1, 
+                 activation='ReLU', 
+                 **kwargs):
         super(Conv2dNormActivation, self).__init__()
-        self.conv = nn.Conv2d(input_channels, output_channels, kernel_size=kernel_size, stride=stride, padding=kernel_size//2, groups=groups, **kwargs)
+        self.conv = nn.Conv2d(input_channels, 
+                              output_channels, 
+                              kernel_size=kernel_size, 
+                              stride=stride, 
+                              padding=kernel_size//2, 
+                              groups=groups, 
+                              **kwargs)
         self.norm = nn.BatchNorm2d(output_channels)
         if activation == 'ReLU':
             self.activation = nn.ReLU()
@@ -115,7 +161,6 @@ class Conv2dNormActivation(nn.Module):
             self.activation = nn.Hardswish()
         else:
             torch._assert(False, f"Activation function {activation} is not supported.")
-        self.activation = activation
 
 
     def forward(self, x):
